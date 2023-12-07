@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/tnaucoin/greenlight/internal/data"
 	"net/http"
+	"time"
 )
 
 func (app *application) createMovieHandler(w http.ResponseWriter, r *http.Request) {
@@ -15,5 +17,18 @@ func (app *application) showMoviesHandler(w http.ResponseWriter, r *http.Request
 		http.NotFound(w, r)
 		return
 	}
-	fmt.Fprintf(w, "show details of movie %d\n", id)
+	m := data.Movie{
+		ID:        id,
+		CreatedAt: time.Now(),
+		Title:     "Casablanca",
+		Runtime:   102,
+		Genres:    []string{"drama", "romance"},
+		Version:   1,
+	}
+	err = app.writeJSON(w, http.StatusOK, envelope{"movie": m}, nil)
+	if err != nil {
+		app.logger.Error(err.Error())
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	}
+
 }
