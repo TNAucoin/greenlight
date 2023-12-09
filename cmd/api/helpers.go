@@ -22,6 +22,17 @@ func (app *application) readIDParam(r *http.Request) (int64, error) {
 	return id, nil
 }
 
+// removeEmptyStringEntries removes empty string entries from a slice of strings.
+func (app *application) removeEmptyStringEntries(data *[]string) {
+	var newData []string
+	for _, value := range *data {
+		if value != "" {
+			newData = append(newData, value)
+		}
+	}
+	*data = newData
+}
+
 func (app *application) writeJSON(w http.ResponseWriter, status int, data envelope, headers http.Header) error {
 	// Encode the data to json
 	js, err := json.MarshalIndent(data, "", "\t")
