@@ -15,6 +15,7 @@ type Movie struct {
 	Version   int32
 }
 
+// validateTitle checks the title field for the movie is not blank and is not
 func validateTitle(v *validator.Validator, title string) {
 	v.Check(title != "", "title", "this field cannot be blank")
 	v.Check(len(title) < 500, "title", "this field is too long (maximum is 500 characters)")
